@@ -1,15 +1,40 @@
-# Bot Telegram + OpenAI + Google Sheets
+# 🤖 Bot Financeiro Telegram com Upload de Comprovantes
 
-Um bot inteligente para o Telegram que gerencia entradas e saídas financeiras usando processamento de linguagem natural da OpenAI e registra tudo no Google Sheets.
+Um bot inteligente para o Telegram que gerencia entradas e saídas financeiras usando IA da OpenAI, aceita upload de comprovantes com análise automática, e registra tudo no Google Sheets com links para os arquivos no Google Drive.
 
-## 🚀 Características
+## ✨ Funcionalidades Principais
 
+### 💬 **Análise de Mensagens**
 - **Comandos diretos**: `/entrada 100 venda` ou `/saida 35,90 frete`
 - **Linguagem natural**: "paguei 35,90 de frete hoje" ou "entrou 500 pix do Carlos"
-- **Integração OpenAI**: Extração inteligente de dados de mensagens livres
-- **Google Sheets**: Registro automático em planilha
+- **IA OpenAI**: Extração inteligente de dados de mensagens livres
+
+### 📷 **Upload de Comprovantes** ✨ NOVO!
+- **Fotos de recibos**: Envie foto de nota fiscal, recibo ou comprovante
+- **Documentos PDF**: Upload de PDFs de comprovantes
+- **Análise automática**: OpenAI Vision analisa automaticamente valores, tipo e descrição
+- **Armazenamento**: Arquivos salvos no Google Drive com links na planilha
+
+### 📊 **Organização e Relatórios**
+- **Google Sheets**: Registro automático em planilhas organizadas por mês
+- **Links para comprovantes**: Cada lançamento tem link direto para o arquivo
+- **Formato brasileiro**: Parsing correto de valores (R$ 750,00)
 - **Relatórios**: Saldo e relatórios mensais
-- **Validações**: Tratamento robusto de erros e dados
+
+## 🔧 Correções Recentes
+
+### ✅ **Parsing de Valores Brasileiros**
+- **Problema resolvido**: 750,00 agora é interpretado como R$ 750,00 (não R$ 750.000,00)
+- **Suporte a formatos**: 
+  - `750,00` → R$ 750,00
+  - `1.250,50` → R$ 1.250,50  
+  - `750.50` → R$ 750,50 (formato americano)
+  - `750` → R$ 750,00
+
+### 🧠 **IA Vision Melhorada**
+- **Prompt otimizado**: Instruções específicas para formato brasileiro
+- **Análise precisa**: Melhor detecção de valores, tipos e descrições
+- **Múltiplos formatos**: Suporte a notas fiscais, recibos, comprovantes PIX
 
 ## 📋 Pré-requisitos
 
