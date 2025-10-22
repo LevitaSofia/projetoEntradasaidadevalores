@@ -1,0 +1,73 @@
+# Docker Compose para desenvolvimento e testes locais
+version: '3.8'
+
+services:
+  # Bot principal
+  bot-financeiro:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: telegram-finance-bot
+    environment:
+      - APP_ENV=dev
+      - LOG_LEVEL=DEBUG
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - bot_logs:/app/logs
+    ports:
+      - "8080:8080"  # Webhook port
+      - "8081:8081"  # Healthcheck port
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Testes
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+    container_name: bot-tests
+    environment:
+      - APP_ENV=test
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - test_reports:/app/htmlcov
+    command: python -m pytest tests/ -v --cov=app --cov-report=html
+    profiles:
+      - testing
+
+  # Nginx para proxy reverso (produção)
+  nginx:
+    image: nginx:alpine
+    container_name: bot-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - bot-financeiro
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  bot_logs:
+    driver: local
+  test_reports:
+    driver: local
+
+networks:
+  default:
+    name: bot-network
